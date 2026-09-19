@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vous êtes cordialement invité(e) à ne pas entrer</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nosifer&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<script>
+  (function(){
+    // le manoir ne s'ouvre que le 31 octobre. ajoutez ?preview=halloween a l'URL pour tester avant.
+    var now = new Date();
+    var isHalloween = (now.getMonth() === 9 && now.getDate() === 31);
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('preview') === 'halloween') isHalloween = true;
+    if (isHalloween) document.documentElement.classList.add('unlocked');
+  })();
+</script>
+
+<style>
+  :root{
+    --void:#07050a;
+    --void-deep:#030204;
+    --bone:#e9e2d3;
+    --bone-dim:#a99f8c;
+    --blood:#8e0e1a;
+    --blood-bright:#c81c2b;
+    --grave-green:#5f7a45;
+    --violet:#2a1a3e;
+    --violet-glow: rgba(90,50,120,0.35);
+    --header-h: 0px;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  :root:not([data-theme="light"]){ color-scheme: dark; }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior:smooth; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body{
+    margin:0;
+    background: var(--void);
+    color: var(--bone);
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 19px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,.display{
+    font-family:'Nosifer', 'EB Garamond', serif;
+    font-weight:400;
+    letter-spacing: 0.5px;
+    color: var(--bone);
+    text-shadow: 0 0 18px rgba(200,28,43,0.35), 0 0 2px rgba(0,0,0,0.8);
+  }
+  a{ color: inherit; }
+  ::selection{ background: var(--blood); color: var(--bone); }
+
+  :focus-visible{
+    outline: 2px solid var(--grave-green);
+    outline-offset: 3px;
+  }
+
+  .container{
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- ambient layers ---------- */
+  .sky{
+    position: fixed; inset:0;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(60,20,70,0.5), transparent 55%),
+      radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 85% 60%, #fff, transparent),
+      radial-gradient(1px 1px at 35% 70%, #fff, transparent),
+      radial-gradient(1px 1px at 55% 45%, #fff, transparent),
+      var(--void-deep);
+    z-index:-6;
+  }
+  .moon{
+    position: fixed; top: 6%; right: 10%;
+    width: 130px; height:130px; border-radius:50%;
+    background: radial-gradient(circle at 38% 35%, #f3ecd8, #c9bd98 60%, #7d7458 100%);
+    box-shadow: 0 0 70px rgba(230,220,180,0.35), 0 0 140px rgba(180,160,110,0.15);
+    z-index:-5;
+    opacity:.9;
+  }
+  .moon::before, .moon::after{
+    content:""; position:absolute; border-radius:50%; background: rgba(120,110,85,0.35);
+  }
+  .moon::before{ width:26px; height:26px; top:22px; left:30px; }
+  .moon::after{ width:16px; height:16px; top:70px; left:75px; }
+
+  .fog{
+    position: fixed; left:-20%; width:140%; height:220px;
+    background: linear-gradient(to top, rgba(30,20,40,0.55), transparent);
+    filter: blur(6px);
+    z-index:-4;
+    pointer-events:none;
+  }
+  .fog--1{ bottom:-40px; animation: drift 46s linear infinite; }
+  .fog--2{ bottom:20px; opacity:.6; animation: drift 68s linear infinite reverse; }
+
+  @keyframes drift{
+    0%{ transform: translateX(-6%); }
+    50%{ transform: translateX(6%); }
+    100%{ transform: translateX(-6%); }
+  }
+
+  .bat{
+    position: fixed; top: 18%; left:-40px; font-size: 22px;
+    filter: drop-shadow(0 0 4px rgba(0,0,0,0.8));
+    opacity:.85;
+    z-index:-3;
+    animation: fly 18s linear infinite;
+  }
+  .bat--2{ top:32%; font-size:15px; animation-duration: 24s; animation-delay: -6s; }
+  .bat--3{ top:10%; font-size:12px; animation-duration: 14s; animation-delay: -3s; }
+  @keyframes fly{
+    0%{ transform: translate(-5vw, 0) scale(1); }
+    50%{ transform: translate(55vw, -40px) scale(1); }
+    100%{ transform: translate(115vw, 10px) scale(1); }
+  }
+
+  .web{
+    position:fixed; width:200px; height:200px; opacity:.35; z-index:-3; pointer-events:none;
+  }
+  .web--tl{ top:-30px; left:-30px; transform: rotate(0deg); }
+  .web--tr{ top:-30px; right:-30px; transform: scaleX(-1); }
+
+  @media (prefers-reduced-motion: reduce){
+    .fog, .bat, html{ animation: none !important; scroll-behavior:auto; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height: 100svh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    position:relative;
+    padding: 60px 24px 40px;
+  }
+  .hero .eyebrow{
+    font-family:'EB Garamond', serif;
+    font-style: italic;
+    color: var(--bone-dim);
+    margin-bottom: 18px;
+    font-size: 1.05rem;
+  }
+  .hero h1{
+    font-size: clamp(2.1rem, 7vw, 4rem);
+    line-height:1.15;
+    margin: 0 0 22px;
+    max-width: 11ch;
+  }
+  .flicker{ animation: flicker 5.4s infinite; }
+  @keyframes flicker{
+    0%, 3%, 6%, 100%{ opacity:1; }
+    4%{ opacity:.4; }
+    5%{ opacity:.85; }
+    62%{ opacity:1; }
+    63%{ opacity:.5; }
+    64%{ opacity:1; }
+  }
+  .hero p.lede{
+    max-width: 40ch;
+    color: var(--bone-dim);
+    font-size: 1.15rem;
+    margin: 0 0 34px;
+  }
+  .mansion{
+    position:absolute; bottom:0; left:0; width:100%;
+    line-height:0;
+  }
+  .mansion svg{ width:100%; height:auto; display:block; }
+
+  .scroll-cue{
+    margin-top: 30px;
+    font-size: .85rem;
+    color: var(--bone-dim);
+    font-style: italic;
+    opacity:.8;
+  }
+
+  /* ---------- legend section ---------- */
+  section{ position:relative; padding: 90px 0; }
+  .legend .container{ max-width: 560px; }
+  .legend h2{ font-size: 1.7rem; margin-bottom: 26px; }
+  .legend p{ color: var(--bone-dim); }
+  .legend p + p{ margin-top: 1.2em; }
+  .legend .signoff{
+    margin-top: 30px; color: var(--bone); font-style: italic;
+  }
+
+  /* ---------- countdown ---------- */
+  .countdown{
+    background: linear-gradient(180deg, transparent, var(--violet-glow) 40%, transparent);
+    text-align:center;
+  }
+  .countdown h2{ font-size: 1.5rem; margin-bottom: 8px; }
+  .countdown .sub{ color: var(--bone-dim); margin-bottom: 40px; font-style: italic; }
+  .clock{
+    display:flex; justify-content:center; gap: clamp(10px, 4vw, 30px);
+    flex-wrap: wrap;
+  }
+  .clock .unit{ min-width: 70px; }
+  .clock .num{
+    font-family:'Nosifer', serif;
+    font-size: clamp(1.6rem, 6vw, 2.6rem);
+    color: var(--blood-bright);
+    text-shadow: 0 0 20px rgba(200,28,43,0.5);
+    display:block;
+  }
+  .clock .label{
+    display:block; margin-top:6px; font-size:.8rem; color: var(--bone-dim); font-style: italic;
+  }
+
+  /* ---------- the door (jumpscare) ---------- */
+  .door{ text-align:center; }
+  .door h2{ font-size: 1.6rem; margin-bottom: 14px; }
+  .door p{ color: var(--bone-dim); max-width: 42ch; margin: 0 auto 36px; }
+  .knock-btn{
+    font-family:'Nosifer', serif;
+    font-size: 1.1rem;
+    background: var(--blood);
+    color: var(--bone);
+    border: 1px solid rgba(233,226,211,0.25);
+    padding: 18px 36px;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: .5px;
+    box-shadow: 0 0 0 rgba(200,28,43,0.5);
+    transition: transform .15s ease, box-shadow .3s ease, background .3s ease;
+  }
+  .knock-btn:hover{ background: var(--blood-bright); box-shadow: 0 0 30px rgba(200,28,43,0.55); transform: translateY(-2px); }
+  .knock-btn:active{ transform: translateY(0px) scale(.98); }
+  .knock-count{ margin-top: 16px; font-size:.85rem; color: var(--bone-dim); font-style: italic; min-height: 1.2em; }
+
+  .scare-overlay{
+    position: fixed; inset:0; z-index: 999;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--blood-bright);
+    opacity:0; pointer-events:none;
+  }
+  .scare-overlay.active{
+    animation: scare .45s ease-out forwards;
+    pointer-events:all;
+  }
+  .scare-overlay svg{ width: min(60vw, 340px); filter: drop-shadow(0 0 40px rgba(0,0,0,0.8)); }
+  @keyframes scare{
+    0%{ opacity:0; }
+    8%{ opacity:1; background: #fff; }
+    18%{ opacity:1; background: var(--void); }
+    100%{ opacity:0; background: var(--void); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scare-overlay.active{ animation: none; opacity:0; }
+  }
+
+  /* ---------- trick or treat ---------- */
+  .treats{ text-align:center; }
+  .treats h2{ font-size: 1.6rem; margin-bottom: 10px; }
+  .treats p.intro{ color: var(--bone-dim); margin-bottom: 40px; }
+  .pumpkin-row{
+    display:flex; justify-content:center; gap: 22px; flex-wrap:wrap;
+  }
+  .pumpkin{
+    width: 92px; height: 92px; border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(233,226,211,0.15);
+    font-size: 2.4rem;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .pumpkin:hover{ transform: translateY(-3px); border-color: rgba(233,226,211,0.4); }
+  .pumpkin.opened{ cursor:default; background: rgba(95,122,69,0.08); }
+  .pumpkin.opened:hover{ transform:none; }
+  .reveal-msg{
+    margin-top: 26px; min-height: 1.4em; color: var(--grave-green); font-style: italic;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    text-align:center; padding: 70px 24px 60px;
+    color: var(--bone-dim);
+    font-style: italic;
+    font-size: .95rem;
+    border-top: 1px solid rgba(233,226,211,0.08);
+  }
+  .sound-toggle{
+    margin-top: 22px;
+    background: transparent;
+    border: 1px solid rgba(233,226,211,0.25);
+    color: var(--bone-dim);
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    padding: 8px 16px;
+    border-radius: 3px;
+    cursor:pointer;
+  }
+  .sound-toggle:hover{ color: var(--bone); border-color: rgba(233,226,211,0.5); }
+
+  /* ---------- gate (locked until Oct 31) ---------- */
+  #site{ display:none; }
+  html.unlocked #site{ display:block; }
+  html.unlocked #gate{ display:none; }
+
+  #gate{
+    min-height: 100svh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding: 60px 24px;
+    position:relative;
+  }
+  #gate .lock-icon{ font-size: 2.6rem; margin-bottom: 22px; filter: drop-shadow(0 0 10px rgba(200,28,43,0.4)); }
+  #gate h1{
+    font-size: clamp(1.7rem, 6vw, 3rem);
+    margin: 0 0 18px;
+    max-width: 13ch;
+  }
+  #gate p.lede{
+    max-width: 42ch; color: var(--bone-dim); font-size: 1.1rem; margin: 0 0 40px;
+  }
+  #gate .clock{ margin-bottom: 30px; }
+  #gate .fine-print{
+    font-size: .85rem; color: var(--bone-dim); font-style: italic; opacity:.75; max-width: 36ch;
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" aria-hidden="true"></div>
+<div class="moon" aria-hidden="true"></div>
+<div class="fog fog--1" aria-hidden="true"></div>
+<div class="fog fog--2" aria-hidden="true"></div>
+<div class="bat bat--1" aria-hidden="true">🦇</div>
+<div class="bat bat--2" aria-hidden="true">🦇</div>
+<div class="bat bat--3" aria-hidden="true">🦇</div>
+
+<svg class="web web--tl" viewBox="0 0 100 100" aria-hidden="true">
+  <g fill="none" stroke="#cfc7b8" stroke-width="0.6">
+    <path d="M0,0 L100,100 M0,20 L60,100 M0,45 L35,100 M0,70 L15,100 M20,0 L100,60 M45,0 L100,35 M70,0 L100,15"/>
+    <path d="M0,8 Q20,20 30,45 Q10,40 0,25"/>
+    <path d="M0,18 Q35,32 45,65 Q18,55 0,40"/>
+    <path d="M0,32 Q48,46 60,85 Q28,72 0,55"/>
+  </g>
+</svg>
+
+<div id="gate">
+  <div class="lock-icon" aria-hidden="true">🔒🎃</div>
+  <h1 class="flicker">Le manoir reste verrouillé</h1>
+  <p class="lede">Ces grilles n'ouvrent qu'une seule nuit par an. Revenez frapper le 31 octobre, à la tombée du jour — pas avant.</p>
+  <div class="clock" id="gateClock" aria-live="off">
+    <div class="unit"><span class="num" id="gd-days">00</span><span class="label">jours</span></div>
+    <div class="unit"><span class="num" id="gd-hours">00</span><span class="label">heures</span></div>
+    <div class="unit"><span class="num" id="gd-mins">00</span><span class="label">minutes</span></div>
+    <div class="unit"><span class="num" id="gd-secs">00</span><span class="label">secondes</span></div>
+  </div>
+  <p class="fine-print">quoi que vous fassiez, les grilles ne céderont pas avant l'heure.</p>
+</div>
+
+<div id="site">
+<main>
+
+  <section class="hero">
+    <p class="eyebrow">Le 31 octobre approche.</p>
+    <h1 class="flicker">Vous êtes cordialement uninvité(e)</h1>
+    <p class="lede">Les grilles ne s'ouvrent qu'une nuit par an. Cette année, on a laissé une place pour vous — que vous l'ayez demandée ou non.</p>
+    <p class="scroll-cue">descendez, si vous l'osez ↓</p>
+
+    <div class="mansion" aria-hidden="true">
+      <svg viewBox="0 0 1200 260" preserveAspectRatio="none">
+        <rect x="0" y="150" width="1200" height="110" fill="#0a0710"/>
+        <polygon points="150,150 220,60 290,150" fill="#0a0710"/>
+        <rect x="170" y="90" width="100" height="60" fill="#0a0710"/>
+        <rect x="80" y="150" width="260" height="100" fill="#0a0710"/>
+        <rect x="180" y="190" width="30" height="60" fill="#1c1420"/>
+        <circle cx="212" cy="220" r="2" fill="#c81c2b"/>
+        <rect x="900" y="130" width="40" height="120" fill="#0a0710"/>
+        <polygon points="880,130 920,90 960,130" fill="#0a0710"/>
+        <rect x="600" y="100" width="220" height="150" fill="#0a0710"/>
+        <polygon points="590,100 710,20 830,100" fill="#0a0710"/>
+        <rect x="675" y="150" width="26" height="34" fill="#c81c2b" opacity="0.75"/>
+        <rect x="725" y="150" width="26" height="34" fill="#c81c2b" opacity="0.55"/>
+        <rect x="0" y="235" width="1200" height="25" fill="#050308"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="legend">
+    <div class="container">
+      <h2>La légende du manoir</h2>
+      <p>On raconte qu'une famille vivait ici, autrefois — avant que les lumières ne s'éteignent d'un coup, un soir de fin octobre, et ne se rallument jamais.</p>
+      <p>Les voisins disent encore entendre, certains soirs, une porte grincer alors qu'aucun vent ne souffle. D'autres jurent avoir vu une silhouette derrière les volets du dernier étage — toujours immobile, toujours tournée vers la rue.</p>
+      <p>Personne n'est jamais entré deux fois.</p>
+      <p class="signoff">— extrait du carnet du gardien, année illisible</p>
+    </div>
+  </section>
+
+  <section class="countdown">
+    <div class="container">
+      <h2>Le compte à rebours</h2>
+      <p class="sub">jusqu'à l'ouverture des grilles</p>
+      <div class="clock" id="clock" aria-live="off">
+        <div class="unit"><span class="num" id="cd-days">00</span><span class="label">jours</span></div>
+        <div class="unit"><span class="num" id="cd-hours">00</span><span class="label">heures</span></div>
+        <div class="unit"><span class="num" id="cd-mins">00</span><span class="label">minutes</span></div>
+        <div class="unit"><span class="num" id="cd-secs">00</span><span class="label">secondes</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="door">
+    <div class="container">
+      <h2>La porte d'entrée</h2>
+      <p>Elle n'est jamais verrouillée. Elle attend juste que quelqu'un ose frapper trois fois.</p>
+      <button class="knock-btn" id="knockBtn" type="button">Frapper à la porte</button>
+      <p class="knock-count" id="knockCount"></p>
+    </div>
+  </section>
+
+  <section class="treats">
+    <div class="container">
+      <h2>Farce ou friandise</h2>
+      <p class="intro">Trois citrouilles. Une seule promesse tenue.</p>
+      <div class="pumpkin-row" id="pumpkinRow">
+        <button class="pumpkin" type="button" aria-label="Ouvrir la première citrouille">🎃</button>
+        <button class="pumpkin" type="button" aria-label="Ouvrir la deuxième citrouille">🎃</button>
+        <button class="pumpkin" type="button" aria-label="Ouvrir la troisième citrouille">🎃</button>
+      </div>
+      <p class="reveal-msg" id="revealMsg" aria-live="polite"></p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Ici repose ce site — construit une nuit sans lune, pour une seule occasion.</p>
+  <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">🔇 activer l'ambiance sonore</button>
+</footer>
+</div><!-- /#site -->
+
+<div class="scare-overlay" id="scareOverlay" aria-hidden="true">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="100" cy="95" rx="70" ry="80" fill="#f4efe4"/>
+    <ellipse cx="70" cy="90" rx="16" ry="22" fill="#0a0710"/>
+    <ellipse cx="130" cy="90" rx="16" ry="22" fill="#0a0710"/>
+    <circle cx="70" cy="90" r="5" fill="#c81c2b"/>
+    <circle cx="130" cy="90" r="5" fill="#c81c2b"/>
+    <path d="M60,150 Q100,180 140,150 Q100,190 60,150 Z" fill="#0a0710"/>
+    <path d="M65,150 L70,140 L75,150 L80,138 L85,150 L90,140 L95,150 L100,138 L105,150 L110,140 L115,150 L120,138 L125,150 L130,150" fill="none" stroke="#f4efe4" stroke-width="2"/>
+    <path d="M45,60 Q60,40 80,55" stroke="#0a0710" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M155,60 Q140,40 120,55" stroke="#0a0710" stroke-width="6" fill="none" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---- countdown to next Halloween (Oct 31) ---- */
+  function nextHalloween(){
+    var now = new Date();
+    var year = now.getFullYear();
+    var target = new Date(year, 9, 31, 0, 0, 0);
+    if (now.getTime() > target.getTime()) target = new Date(year + 1, 9, 31, 0, 0, 0);
+    return target;
+  }
+  var target = nextHalloween();
+  var dEl = document.getElementById('cd-days');
+  var hEl = document.getElementById('cd-hours');
+  var mEl = document.getElementById('cd-mins');
+  var sEl = document.getElementById('cd-secs');
+  var gdEl = document.getElementById('gd-days');
+  var ghEl = document.getElementById('gd-hours');
+  var gmEl = document.getElementById('gd-mins');
+  var gsEl = document.getElementById('gd-secs');
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    var diff = Math.max(0, target.getTime() - Date.now());
+    var days = Math.floor(diff / 86400000);
+    var hours = Math.floor((diff % 86400000) / 3600000);
+    var mins = Math.floor((diff % 3600000) / 60000);
+    var secs = Math.floor((diff % 60000) / 1000);
+    if (dEl){ dEl.textContent = pad(days); hEl.textContent = pad(hours); mEl.textContent = pad(mins); sEl.textContent = pad(secs); }
+    if (gdEl){ gdEl.textContent = pad(days); ghEl.textContent = pad(hours); gmEl.textContent = pad(mins); gsEl.textContent = pad(secs); }
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ---- audio: synthesized ambience + shriek, no external files ---- */
+  var audioCtx = null;
+  var droneNodes = null;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function ensureCtx(){
+    if (!audioCtx){
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    }
+    return audioCtx;
+  }
+
+  function startDrone(){
+    var ctx = ensureCtx();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume();
+    var master = ctx.createGain();
+    master.gain.value = 0.05;
+    master.connect(ctx.destination);
+
+    var osc1 = ctx.createOscillator();
+    osc1.type = 'sine'; osc1.frequency.value = 55;
+    var osc2 = ctx.createOscillator();
+    osc2.type = 'sine'; osc2.frequency.value = 56.5;
+    var lfo = ctx.createOscillator();
+    lfo.type = 'sine'; lfo.frequency.value = 0.07;
+    var lfoGain = ctx.createGain();
+    lfoGain.gain.value = 0.02;
+    lfo.connect(lfoGain);
+    lfoGain.connect(master.gain);
+
+    osc1.connect(master); osc2.connect(master);
+    osc1.start(); osc2.start(); lfo.start();
+    droneNodes = { master: master, osc1: osc1, osc2: osc2, lfo: lfo };
+  }
+
+  function stopDrone(){
+    if (!droneNodes) return;
+    try{
+      droneNodes.osc1.stop(); droneNodes.osc2.stop(); droneNodes.lfo.stop();
+    }catch(e){}
+    droneNodes = null;
+  }
+
+  function playShriek(){
+    var ctx = ensureCtx();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume();
+    var now = ctx.currentTime;
+
+    var osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.18);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.5);
+
+    var gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.18, now + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now + 0.6);
+  }
+
+  var soundOn = false;
+  var soundToggle = document.getElementById('soundToggle');
+  soundToggle.addEventListener('click', function(){
+    soundOn = !soundOn;
+    if (soundOn){
+      startDrone();
+      soundToggle.textContent = '🔈 couper l\u2019ambiance sonore';
+      soundToggle.setAttribute('aria-pressed', 'true');
+    } else {
+      stopDrone();
+      soundToggle.textContent = '🔇 activer l\u2019ambiance sonore';
+      soundToggle.setAttribute('aria-pressed', 'false');
+    }
+  });
+
+  /* ---- knock / jumpscare ---- */
+  var knockBtn = document.getElementById('knockBtn');
+  var knockCountEl = document.getElementById('knockCount');
+  var overlay = document.getElementById('scareOverlay');
+  var knocks = 0;
+  var messages = [
+    'toc.',
+    'toc… toc.',
+    'quelque chose a répondu, de l\u2019autre côté.'
+  ];
+
+  knockBtn.addEventListener('click', function(){
+    knocks++;
+    if (knocks < 3){
+      knockCountEl.textContent = messages[knocks - 1];
+      return;
+    }
+    knockCountEl.textContent = messages[2];
+    if (soundOn) playShriek();
+    if (!reduceMotion){
+      overlay.classList.remove('active');
+      void overlay.offsetWidth;
+      overlay.classList.add('active');
+      setTimeout(function(){ overlay.classList.remove('active'); }, 500);
+    }
+    knocks = 0;
+  });
+
+  /* ---- trick or treat pumpkins ---- */
+  var pumpkins = document.querySelectorAll('.pumpkin');
+  var revealMsg = document.getElementById('revealMsg');
+  var outcomes = [
+    { icon: '🍬', text: 'une friandise. pour cette fois.' },
+    { icon: '🕷️', text: 'une farce — elle vous a filé entre les doigts.' },
+    { icon: '🍬', text: 'une friandise, un peu poussiéreuse.' }
+  ];
+  var shuffled = outcomes.slice().sort(function(){ return Math.random() - 0.5; });
+
+  pumpkins.forEach(function(p, i){
+    p.addEventListener('click', function(){
+      if (p.classList.contains('opened')) return;
+      p.classList.add('opened');
+      p.textContent = shuffled[i].icon;
+      p.setAttribute('aria-label', 'citrouille ouverte');
+      revealMsg.textContent = shuffled[i].text;
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
